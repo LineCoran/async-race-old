@@ -1,5 +1,7 @@
+import Main from './pages/Main';
+
 function App() {
-  return <div>fsd</div>;
+  return <Main />;
 }
 
 export default App;
