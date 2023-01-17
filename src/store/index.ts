@@ -1,14 +1,14 @@
-import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import { productsApi } from '../features/apiSlice';
+import { configureStore } from '@reduxjs/toolkit';
+import { garageApi } from '../features/apiSlice';
 import carsReducer from './carsSlice';
 
 const store = configureStore({
     reducer: {
         carsReducer,
-        [productsApi.reducerPath]: productsApi.reducer,
+        [garageApi.reducerPath]: garageApi.reducer,
     },
         middleware: (getDefaultMiddleware) => 
-          getDefaultMiddleware().concat(productsApi.middleware)
+          getDefaultMiddleware().concat(garageApi.middleware)
 });
 
 export default store;

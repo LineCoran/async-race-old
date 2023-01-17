@@ -1,5 +1,10 @@
 export interface ICar {
-    id: number;
     name: string;
     color: string;
 }
+
+export interface ICarRES {
+    name: string;
+    color: string;
+}
+

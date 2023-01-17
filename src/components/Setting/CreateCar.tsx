@@ -1,16 +1,24 @@
 import { Button, TextField } from "@mui/material"
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
-import { ICar } from "../../interfaces/interfaces";
+import { useAddCarMutation } from "../../features/apiSlice";
 
-interface ISettinProps {
-    addCar: (car: ICar) => void;
-    buttonName: string;
-}
-
-function Setting({ addCar, buttonName }: ISettinProps) {
+function CreateCar() {
   const [color, setColor] = useState('#aabbcc');
   const [name, setName] = useState('car');
+  const [addCar] = useAddCarMutation();
+
+  const handleAddCar = async () => {
+    await addCar({color, name}).unwrap();
+  }
+
+  const handleGenerateCar = async () => {
+    let countOfCarsGenerate = 100;
+    while(countOfCarsGenerate > 0) {
+      addCar({color, name}).unwrap();
+      countOfCarsGenerate--;
+    }
+  }
 
     return (
       <div className="form-setting">
@@ -23,9 +31,10 @@ function Setting({ addCar, buttonName }: ISettinProps) {
           onChange={(e) => setName(e.target.value)}
         />
         <HexColorPicker color={color} onChange={setColor} />
-        <Button onClick={() => addCar({id: 22, name, color})}>{buttonName}</Button>
+        <Button onClick={handleAddCar}>ADD CAR</Button>
+        <Button onClick={handleGenerateCar}>GENERATE</Button>
       </div>
     )
 }
 
-export default Setting
+export default CreateCar;
