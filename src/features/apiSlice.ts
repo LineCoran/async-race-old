@@ -7,8 +7,18 @@ type carAPI = {
     id: number,
 }
 
+type ICarStatus = {
+    id: number;
+    status: string;
+}
+
+type ICarSuccessResponse = {
+    velocity: number;
+    distance: number;
+  }
+
 export const garageApi = createApi({
-    reducerPath: 'productsApi',
+    reducerPath: 'Cars',
     tagTypes: ['Cars'],
     baseQuery: fetchBaseQuery({baseUrl: 'http://127.0.0.1:3000'}),
     endpoints: (builder) => ({
@@ -39,7 +49,20 @@ export const garageApi = createApi({
             }),
             invalidatesTags: [{type: 'Cars', id: 'LIST'}],
         }),
+        startCar: builder.mutation<ICarSuccessResponse, ICarStatus>({
+            query(data) {
+              const { id, status } = data;
+              return {
+                url: `/engine`,
+                method: 'PATCH',
+                params: {
+                    id,
+                    status,
+                }
+              }
+            }
+        }),
     })
 })
 
-export const { useGetAllCarsQuery, useAddCarMutation, useDeleteCarMutation } = garageApi;
+export const { useGetAllCarsQuery, useAddCarMutation, useDeleteCarMutation, useStartCarMutation } = garageApi;
