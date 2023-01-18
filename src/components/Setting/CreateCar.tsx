@@ -22,27 +22,30 @@ function CreateCar() {
     }
   }
 
-  async function startRace() {
+  async function startRace(value: string) {
     if (data !== undefined && data.length > 0) {
 
       Promise.all(data.map((car, index) => {
         return new Promise(async (res, rej) => {
           console.log('index: ',index);
-          const carSpeed = await startCar({id: index+1, status: 'started'}).unwrap();
+          const carSpeed = await startCar({id: index+1, status: value}).unwrap();
           const time = (carSpeed.distance / carSpeed.velocity)/1000;
           res(time);
-          console.log('create');
         })
       })).then(res => res.map((car, index) => setAnimation(String(index+1), car as number)));
     }
   }
 
-function setAnimation(id: string, time: number) {
+  function setAnimation(id: string, time: number) {
     const car = document.getElementById(id);
-    console.log(time);
     if(car) {
-        car.style.transition = `transform ${time}s linear`;
-        car.style.transform = `translateX(500px)`;
+        if (time === Infinity) {
+            car.style.transition = ``;
+            car.style.transform = ``;
+        } else {
+            car.style.transition = `transform ${time}s linear`;
+            car.style.transform = `translateX(90vw)`;
+        }
     }
 }
   
@@ -60,7 +63,8 @@ function setAnimation(id: string, time: number) {
         <HexColorPicker color={color} onChange={setColor} />
         <Button onClick={handleAddCar}>ADD CAR</Button>
         <Button onClick={handleGenerateCar}>GENERATE</Button>
-        <Button onClick={startRace}>Race</Button>
+        <Button onClick={() => startRace('started')}>Race</Button>
+        <Button onClick={() => startRace('stopped')}>Stop</Button>
       </div>
     )
 }

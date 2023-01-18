@@ -26,12 +26,6 @@ function Car({ car } : ICarProps) {
         setAnimation(String(id), time);
     }
 
-    async function handleStopCar(id: number, status: string) {
-        const res = await startCar({id, status}).unwrap();
-        const time = (res.distance/res.velocity)/1000;
-        setAnimation(String(id), time);
-    }
-
     function setAnimation(id: string, time: number) {
         const car = document.getElementById(id);
         if(car) {
@@ -50,7 +44,7 @@ function Car({ car } : ICarProps) {
             <h2>{car.id}. {car.name}</h2>
             <ToysIcon id={String(car.id)} htmlColor={car.color} sx={{ fontSize: 74, }} />
             <Button onClick={() => handleStartCar(car.id, 'started')}>A</Button>
-            <Button onClick={() => handleStopCar(car.id, 'stopped')}>B</Button>
+            <Button onClick={() => handleStartCar(car.id, 'stopped')}>B</Button>
             <Button onClick={() => handleDeleteCar(car.id)}>Delete Car</Button>
         </div>
     )
