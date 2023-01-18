@@ -17,6 +17,10 @@ type ICarSuccessResponse = {
     distance: number;
   }
 
+type ICheckDriver = {
+    success: boolean;
+}
+
 export const garageApi = createApi({
     reducerPath: 'Cars',
     tagTypes: ['Cars'],
@@ -62,7 +66,26 @@ export const garageApi = createApi({
               }
             }
         }),
+        checkEngine: builder.mutation<ICheckDriver, ICarStatus>({
+            query(data) {
+              const { id, status } = data;
+              return {
+                url: `/engine`,
+                method: 'PATCH',
+                params: {
+                    id,
+                    status,
+                }
+              }
+            }
+        }),
     })
 })
 
-export const { useGetAllCarsQuery, useAddCarMutation, useDeleteCarMutation, useStartCarMutation } = garageApi;
+export const {
+  useGetAllCarsQuery,
+  useAddCarMutation,
+  useDeleteCarMutation,
+  useStartCarMutation,
+  useCheckEngineMutation,
+} = garageApi;

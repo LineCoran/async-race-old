@@ -1,7 +1,7 @@
-import Main from './pages/Main';
+import Garage from './pages/Garage';
 
 function App() {
-  return <Main />;
+  return <Garage />;
 }
 
 export default App;

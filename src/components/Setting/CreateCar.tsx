@@ -22,17 +22,20 @@ function CreateCar() {
     }
   }
 
-  async function startRace(value: string) {
+  async function startRace(status: string) {
     if (data !== undefined && data.length > 0) {
 
-      Promise.all(data.map((car, index) => {
+      Promise.all(data.map((_car, index) => {
         return new Promise(async (res, rej) => {
-          console.log('index: ',index);
-          const carSpeed = await startCar({id: index+1, status: value}).unwrap();
+          const carSpeed = await startCar({id: index+1, status: status}).unwrap();
           const time = (carSpeed.distance / carSpeed.velocity)/1000;
           res(time);
         })
-      })).then(res => res.map((car, index) => setAnimation(String(index+1), car as number)));
+      }))
+      
+      .then(res => 
+        res.map((car, index) => 
+          setAnimation(String(index+1), car as number)));
     }
   }
 
@@ -48,8 +51,6 @@ function CreateCar() {
         }
     }
 }
-  
-
     return (
       <div className="form-setting">
         <TextField

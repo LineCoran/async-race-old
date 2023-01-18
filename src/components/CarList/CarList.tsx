@@ -7,11 +7,12 @@ function CarList() {
 
   if (data !== undefined) {
     return (
-      <>
+      <div>
+        <h1>GARAGE({data.length})</h1>
         {data.map((item) => (
           <Car car={item} key={item.id} />
         ))}
-      </>
+      </div>
         )
   } else {
     return (

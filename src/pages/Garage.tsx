@@ -1,7 +1,7 @@
 import MyForm from "../components/MyForm/MyForm";
 import CarList from "../components/CarList/CarList";
 
-function Main() {
+function Garage() {
   return (
     <main>
       <MyForm />  
@@ -12,4 +12,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Garage;
