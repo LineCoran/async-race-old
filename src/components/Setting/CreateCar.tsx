@@ -37,12 +37,6 @@ function CreateCar() {
     }
   }
 
-  async function handleStartCar(id: number, status: string) {
-    const res = await startCar({id, status}).unwrap();
-    const time = (res.distance/res.velocity)/1000;
-    setAnimation(String(id), time);
-}
-
 function setAnimation(id: string, time: number) {
     const car = document.getElementById(id);
     console.log(time);
