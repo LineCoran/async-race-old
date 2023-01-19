@@ -76,8 +76,8 @@ export const garageApi = createApi({
                     id,
                     status,
                 }
-              }
             }
+          }
         }),
     })
 })

@@ -1,9 +1,4 @@
-#car1{
-    border: 1px solid black;
-}
-
 #car1 {
-    border: 5px solid pink;
     animation-iteration-count: 1;
 }
 
