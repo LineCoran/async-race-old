@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material"
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
-import { useAddCarMutation, useGetAllCarsQuery, useStartCarMutation } from "../../features/apiSlice";
+import { useAddCarMutation, useGetAllCarsQuery, useStartCarMutation, useCheckEngineMutation } from "../../features/apiSlice";
 
 function CreateCar() {
   const [color, setColor] = useState('#aabbcc');
@@ -9,6 +9,7 @@ function CreateCar() {
   const [addCar] = useAddCarMutation();
   const { data } = useGetAllCarsQuery('');
   const [startCar] = useStartCarMutation();
+  const [checkEngine] = useCheckEngineMutation();
 
   const handleAddCar = async () => {
     await addCar({color, name}).unwrap();
@@ -24,33 +25,39 @@ function CreateCar() {
 
   async function startRace(status: string) {
     if (data !== undefined && data.length > 0) {
-
       Promise.all(data.map((_car, index) => {
         return new Promise(async (res, rej) => {
           const carSpeed = await startCar({id: index+1, status: status}).unwrap();
           const time = (carSpeed.distance / carSpeed.velocity)/1000;
           res(time);
+          try {
+            await checkEngine({id: index+1, status: 'drive'}).unwrap();
+          } catch(err) {
+            stopAnimation(String(index+1));
+          }
         })
       }))
-      
       .then(res => 
         res.map((car, index) => 
-          setAnimation(String(index+1), car as number)));
+        startAnimation(String(index+1), car as number)));
     }
   }
 
-  function setAnimation(id: string, time: number) {
-    const car = document.getElementById(id);
-    if(car) {
-        if (time === Infinity) {
-            car.style.transition = ``;
-            car.style.transform = ``;
-        } else {
-            car.style.transition = `transform ${time}s linear`;
-            car.style.transform = `translateX(90vw)`;
-        }
-    }
-}
+  function stopAnimation(id: string) {
+      const car = document.getElementById('car'+id);
+      if (car === null) return;
+      car.style.animationPlayState = 'paused';
+  }
+  
+  function startAnimation(id: string, time: number) {
+      const car = document.getElementById('car'+id);
+      if (car === null) return;
+      car.style.animation = (time === Infinity) 
+      ? '' 
+      : `race ${time}s linear forwards`;
+  }
+
+
     return (
       <div className="form-setting">
         <TextField

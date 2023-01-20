@@ -25,31 +25,31 @@ function Car({ car } : ICarProps) {
         const {distance, velocity} = await startCar({id, status}).unwrap();
         const time = (distance/velocity)/1000;
         setStartButtonStatus(true);
-        setAnimation(String(id), time);
+        startAnimation(String(id), time);
         if (status === 'started') {
-            console.log('here');
             try {
                 await checkEngine({id, status: 'drive'}).unwrap();
             } catch(err) {
                 stopAnimation(String(id));
                 setStartButtonStatus(false);
-                console.log(err);
             }
         } else {
             setStartButtonStatus(false);
         }
     }
+
     function stopAnimation(id: string) {
         const car = document.getElementById('car'+id);
-        if (car) {
-            car.style.animationPlayState = 'paused';
-        }
+        if (car === null) return;
+        car.style.animationPlayState = 'paused';
     }
-    function setAnimation(id: string, time: number) {
+    
+    function startAnimation(id: string, time: number) {
         const car = document.getElementById('car'+id);
-        if(car) {
-            car.style.animation = (time === Infinity) ? '' : `race ${time}s linear forwards`;
-        }
+        if (car === null) return;
+        car.style.animation = (time === Infinity) 
+        ? '' 
+        : `race ${time}s linear forwards`;
     }
 
     return(
