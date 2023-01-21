@@ -1,8 +1,4 @@
-#car1 {
-    animation-iteration-count: 1;
-}
-
 @keyframes race {
     0%{transform: translateX(0);}
-    100%{transform: translateX(500px);}
+    100%{transform: translateX(90%);}
 }

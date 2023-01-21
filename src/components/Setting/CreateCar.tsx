@@ -2,14 +2,26 @@ import { Button, TextField } from "@mui/material"
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { useAddCarMutation, useGetAllCarsQuery, useStartCarMutation, useCheckEngineMutation } from "../../features/apiSlice";
+import { calcTime, startAnimation, stopAnimation } from "../../utils/helpers";
+import { useAppDispatch } from "../../hooks";
+import { changeRaceStatus } from "../../store/carsSlice";
+import { useAppSelector } from "../../hooks";
+
+interface carPromiseResult {
+  time: number;
+  id: number;
+}
 
 function CreateCar() {
+  const dispatch = useAppDispatch();
+  const raceStatus = useAppSelector((state) => state.carsReducer.raceStatus);
+  const { data } = useGetAllCarsQuery('');
   const [color, setColor] = useState('#aabbcc');
   const [name, setName] = useState('car');
   const [addCar] = useAddCarMutation();
-  const { data } = useGetAllCarsQuery('');
   const [startCar] = useStartCarMutation();
   const [checkEngine] = useCheckEngineMutation();
+
 
   const handleAddCar = async () => {
     await addCar({color, name}).unwrap();
@@ -24,40 +36,29 @@ function CreateCar() {
   }
 
   async function startRace(status: string) {
-    if (data !== undefined && data.length > 0) {
-      Promise.all(data.map((_car, index) => {
-        return new Promise(async (res, rej) => {
-          const carSpeed = await startCar({id: index+1, status: status}).unwrap();
-          const time = (carSpeed.distance / carSpeed.velocity)/1000;
-          res(time);
-          try {
-            await checkEngine({id: index+1, status: 'drive'}).unwrap();
-          } catch(err) {
-            stopAnimation(String(index+1));
+     if (data !== undefined && data.length > 0) {
+      Promise.all(data.map((car, index) => {
+        return new Promise<carPromiseResult>(async (res, rej) => {
+          const {distance, velocity} = await startCar({id: car.id, status: status}).unwrap();
+          const time = calcTime(distance, velocity);
+          const result = {time, id: car.id};
+          res(result);
+          if (status === 'started') {
+            try {
+              await checkEngine({id: car.id, status: 'drive'}).unwrap();
+            } catch(err) {
+              stopAnimation(car.id);
+            }
           }
         })
       }))
       .then(res => 
-        res.map((car, index) => 
-        startAnimation(String(index+1), car as number)));
+        res.map((car) => {
+          startAnimation(car.id, car.time as number);
+          dispatch(changeRaceStatus(!raceStatus));
+        }))
     }
   }
-
-  function stopAnimation(id: string) {
-      const car = document.getElementById('car'+id);
-      if (car === null) return;
-      car.style.animationPlayState = 'paused';
-  }
-  
-  function startAnimation(id: string, time: number) {
-      const car = document.getElementById('car'+id);
-      if (car === null) return;
-      car.style.animation = (time === Infinity) 
-      ? '' 
-      : `race ${time}s linear forwards`;
-  }
-
-
     return (
       <div className="form-setting">
         <TextField

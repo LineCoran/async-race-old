@@ -1,5 +1,6 @@
 import { useGetAllCarsQuery } from "../../features/apiSlice";
 import Car from "../Car/Car";
+import './CarList.css';
 
 function CarList() {
 
@@ -7,11 +8,13 @@ function CarList() {
 
   if (data !== undefined) {
     return (
-      <div>
-        <h1>GARAGE({data.length})</h1>
-        {data.map((item) => (
-          <Car car={item} key={item.id} />
-        ))}
+      <div className="car-list-wrapper">
+        <h1 className='car-list-title'>GARAGE({data.length})</h1>
+        <div className='car-list'>
+          {data.map((item) => (
+            <Car car={item} key={item.id} />
+          ))}
+        </div>
       </div>
         )
   } else {

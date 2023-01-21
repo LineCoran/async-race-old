@@ -1,18 +1,11 @@
 import { Button } from "@mui/material"
 import { useCheckEngineMutation, useDeleteCarMutation, useStartCarMutation } from '../../features/apiSlice';
-import './Car.css';
 import CarIcon from '../CarIcon/CarIcon';
 import { useState } from 'react';
-
-interface ICarItem {
-   id: number,
-   name: string,
-   color: string, 
-}
-
-interface ICarProps {
-    car: ICarItem;
-}
+import { startAnimation, stopAnimation, calcTime } from "../../utils/helpers";
+import { ICarProps } from "../../interfaces/interfaces";
+import { useAppSelector } from "../../hooks";
+import './Car.css';
 
 function Car({ car } : ICarProps) {
 
@@ -20,46 +13,35 @@ function Car({ car } : ICarProps) {
     const [deleteCar] = useDeleteCarMutation();
     const [startCar] = useStartCarMutation();
     const [checkEngine] = useCheckEngineMutation();
+    const isRace = useAppSelector((state) => state.carsReducer.raceStatus);
 
     async function handleMoveCar(id: number, status: string) {
         const {distance, velocity} = await startCar({id, status}).unwrap();
-        const time = (distance/velocity)/1000;
-        setStartButtonStatus(true);
-        startAnimation(String(id), time);
+        const time = calcTime(distance, velocity);
+        setStartButtonStatus(!startButtonStatus);
+        startAnimation(id, time);
         if (status === 'started') {
             try {
                 await checkEngine({id, status: 'drive'}).unwrap();
             } catch(err) {
-                stopAnimation(String(id));
-                setStartButtonStatus(false);
+                stopAnimation(id);
+                setStartButtonStatus(!startButtonStatus);
             }
         } else {
-            setStartButtonStatus(false);
+            setStartButtonStatus(!startButtonStatus);
         }
     }
 
-    function stopAnimation(id: string) {
-        const car = document.getElementById('car'+id);
-        if (car === null) return;
-        car.style.animationPlayState = 'paused';
-    }
-    
-    function startAnimation(id: string, time: number) {
-        const car = document.getElementById('car'+id);
-        if (car === null) return;
-        car.style.animation = (time === Infinity) 
-        ? '' 
-        : `race ${time}s linear forwards`;
-    }
-
     return(
-        <div>
+        <div className="car-wrapper" id={`${car.id}`}>
             <h3>{car.id}. {car.name}</h3>
-            <div id={'car'+String(car.id)}>
-                <CarIcon color={car.color}/>
+            <div className='track'>
+                <div className='car-icon' id={'car'+String(car.id)}>
+                    <CarIcon color={car.color}/>
+                </div>
             </div>
-            <Button disabled={startButtonStatus} onClick={() => handleMoveCar(car.id, 'started')}>A</Button>
-            <Button disabled={!startButtonStatus} onClick={() => handleMoveCar(car.id, 'stopped')}>B</Button>
+            <Button disabled={startButtonStatus || isRace} onClick={() => handleMoveCar(car.id, 'started')}>A</Button>
+            <Button disabled={!startButtonStatus && !isRace} onClick={() => handleMoveCar(car.id, 'stopped')}>B</Button>
             <Button onClick={() => deleteCar(car.id)}>Delete Car</Button>
         </div>
     )

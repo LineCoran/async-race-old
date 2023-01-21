@@ -8,10 +8,12 @@ type Car = {
 
 type CarsState = {
     cars: Car[];
+    raceStatus: boolean;
 }
 
 const initialState: CarsState = {
     cars: [],
+    raceStatus: false,
 }
 
 const carsSLice = createSlice({
@@ -24,9 +26,12 @@ const carsSLice = createSlice({
                 name: action.payload.name,
                 color: action.payload.color,
             })
+        },
+        changeRaceStatus(state, action: PayloadAction<boolean>) {
+            state.raceStatus = action.payload;
         }
     }
 })
 
-export const { addCar } = carsSLice.actions;
+export const { addCar, changeRaceStatus } = carsSLice.actions;
 export default carsSLice.reducer;
