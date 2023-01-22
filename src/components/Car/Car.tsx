@@ -7,6 +7,7 @@ import { ICarProps } from "../../interfaces/interfaces";
 import { useAppSelector } from "../../hooks";
 import { useAppDispatch } from "../../hooks";
 import { addIdUpdatedCarSlice } from "../../store/carsSlice";
+import ButtonGroup from '@mui/material/ButtonGroup';
 import './Car.css';
 
 function Car({ car, listId } : ICarProps) {
@@ -51,16 +52,40 @@ function Car({ car, listId } : ICarProps) {
 
     return(
         <div className="car-wrapper" id={`${car.id}`}>
-            <h3>{car.id}. {car.name}</h3>
+            <h3>{listId + 1}. {car.name}</h3>
             <div className='track'>
                 <div className='car-icon' id={'car'+String(car.id)}>
                     <CarIcon color={car.color}/>
                 </div>
             </div>
-            <Button sx={{minWidth: 'max-content', margin: '0'}} disabled={startButtonStatus || isRace} onClick={() => handleMoveCar(car.id, 'started')}>A</Button>
-            <Button sx={{minWidth: 'max-content', margin: '0'}} disabled={!startButtonStatus && !isRace} onClick={() => handleMoveCar(car.id, 'stopped')}>B</Button>
-            <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => deleteCar(car.id)}>Delete</Button>
-            <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => handleSelectCar(car.id, listId)}>Select</Button>
+
+        <ButtonGroup sx={{marginBottom: '0.5rem'}} size="small" aria-label="small button group">
+            <Button
+              sx={{minWidth: 'max-content', margin: '0'}}
+              color="success"
+              disabled={startButtonStatus || isRace}
+              onClick={() => handleMoveCar(car.id, 'started')}>A
+            </Button>
+
+            <Button
+              sx={{minWidth: 'max-content', margin: '0'}}
+              disabled={!startButtonStatus && !isRace}
+              onClick={() => handleMoveCar(car.id, 'stopped')}>B
+            </Button>
+
+            <Button
+              color="error"
+              sx={{minWidth: 'max-content', margin: '0'}}
+              onClick={() => deleteCar(car.id)}>Delete
+            </Button>
+
+            <Button
+              color='info'
+              sx={{minWidth: 'max-content', margin: '0'}}
+              onClick={() => handleSelectCar(car.id, listId)}>Select
+            </Button>
+</ButtonGroup>
+           
         </div>
     )
 }

@@ -9,7 +9,6 @@ function CarList() {
   if (data !== undefined) {
     return (
       <div className="car-list-wrapper">
-        <h1 className='car-list-title'>GARAGE({data.length})</h1>
         <div className='car-list'>
           {data.map((item, index) => (
             <Car car={item} key={item.id} listId={index} />

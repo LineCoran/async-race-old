@@ -41,7 +41,11 @@ function UpdateCar() {
           onChange={(e) => setName(e.target.value)}
         />
         <HexColorPicker color={color} onChange={setColor} />
-        <Button disabled={(idUpdateCar ? false : true)} onClick={handleUpdateCar}>Update</Button>
+        <Button
+          sx={{margin: '0.5rem'}} variant='outlined'
+          disabled={(idUpdateCar ? false : true)}
+          onClick={handleUpdateCar}>Update
+        </Button>
       </div>
     )
 }

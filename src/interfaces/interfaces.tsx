@@ -19,3 +19,7 @@ export interface ICarItem {
      listId: number;
  }
 
+ export interface carPromiseResult {
+    time: number;
+    id: number;
+  }
