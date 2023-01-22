@@ -16,5 +16,6 @@ export interface ICarItem {
  
  export interface ICarProps {
      car: ICarItem;
+     listId: number;
  }
 

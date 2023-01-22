@@ -9,7 +9,7 @@ import { useAppDispatch } from "../../hooks";
 import { addIdUpdatedCarSlice } from "../../store/carsSlice";
 import './Car.css';
 
-function Car({ car } : ICarProps) {
+function Car({ car, listId } : ICarProps) {
 
     const [startButtonStatus, setStartButtonStatus] = useState(false);
     const [deleteCar] = useDeleteCarMutation();
@@ -35,17 +35,17 @@ function Car({ car } : ICarProps) {
         }
     }
 
-    function handleSelectCar(id: number) {
-        dispatch(addIdUpdatedCarSlice(id));
-        addStyleSelectedCar(id);
+    function handleSelectCar(carId: number, listId: number) {
+        dispatch(addIdUpdatedCarSlice(carId));
+        addStyleSelectedCar(listId);
     }
 
-    function addStyleSelectedCar(id: number) {
+    function addStyleSelectedCar(listId: number) {
         const allCars = document.querySelectorAll('.car-wrapper');
         allCars.forEach((car) => {
             car.className = 'car-wrapper';
         })
-        allCars[id - 1].classList.toggle('car-wrapper-active');
+        allCars[listId].classList.toggle('car-wrapper-active');
         console.log(allCars);
       }
 
@@ -60,7 +60,7 @@ function Car({ car } : ICarProps) {
             <Button sx={{minWidth: 'max-content', margin: '0'}} disabled={startButtonStatus || isRace} onClick={() => handleMoveCar(car.id, 'started')}>A</Button>
             <Button sx={{minWidth: 'max-content', margin: '0'}} disabled={!startButtonStatus && !isRace} onClick={() => handleMoveCar(car.id, 'stopped')}>B</Button>
             <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => deleteCar(car.id)}>Delete</Button>
-            <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => handleSelectCar(car.id)}>Select</Button>
+            <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => handleSelectCar(car.id, listId)}>Select</Button>
         </div>
     )
 }
