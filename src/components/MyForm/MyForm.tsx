@@ -1,11 +1,13 @@
 import './MyForm.css';
-import CreateCar from '../Setting/CreateCar';
+import CreateCar from '../CreateCar/CreateCar';
+import UpdateCar from '../UptadeCar/UpdateCar';
 
 function MyForm() {
 
   return(
     <section className="form">
       <CreateCar />
+      <UpdateCar />
     </section>      
     )
 }

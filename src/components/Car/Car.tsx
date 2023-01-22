@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { startAnimation, stopAnimation, calcTime } from "../../utils/helpers";
 import { ICarProps } from "../../interfaces/interfaces";
 import { useAppSelector } from "../../hooks";
+import { useAppDispatch } from "../../hooks";
+import { addIdUpdatedCarSlice } from "../../store/carsSlice";
 import './Car.css';
 
 function Car({ car } : ICarProps) {
@@ -14,6 +16,7 @@ function Car({ car } : ICarProps) {
     const [startCar] = useStartCarMutation();
     const [checkEngine] = useCheckEngineMutation();
     const isRace = useAppSelector((state) => state.carsReducer.raceStatus);
+    const dispatch = useAppDispatch();
 
     async function handleMoveCar(id: number, status: string) {
         const {distance, velocity} = await startCar({id, status}).unwrap();
@@ -32,6 +35,20 @@ function Car({ car } : ICarProps) {
         }
     }
 
+    function handleSelectCar(id: number) {
+        dispatch(addIdUpdatedCarSlice(id));
+        addStyleSelectedCar(id);
+    }
+
+    function addStyleSelectedCar(id: number) {
+        const allCars = document.querySelectorAll('.car-wrapper');
+        allCars.forEach((car) => {
+            car.className = 'car-wrapper';
+        })
+        allCars[id - 1].classList.toggle('car-wrapper-active');
+        console.log(allCars);
+      }
+
     return(
         <div className="car-wrapper" id={`${car.id}`}>
             <h3>{car.id}. {car.name}</h3>
@@ -40,9 +57,10 @@ function Car({ car } : ICarProps) {
                     <CarIcon color={car.color}/>
                 </div>
             </div>
-            <Button disabled={startButtonStatus || isRace} onClick={() => handleMoveCar(car.id, 'started')}>A</Button>
-            <Button disabled={!startButtonStatus && !isRace} onClick={() => handleMoveCar(car.id, 'stopped')}>B</Button>
-            <Button onClick={() => deleteCar(car.id)}>Delete Car</Button>
+            <Button sx={{minWidth: 'max-content', margin: '0'}} disabled={startButtonStatus || isRace} onClick={() => handleMoveCar(car.id, 'started')}>A</Button>
+            <Button sx={{minWidth: 'max-content', margin: '0'}} disabled={!startButtonStatus && !isRace} onClick={() => handleMoveCar(car.id, 'stopped')}>B</Button>
+            <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => deleteCar(car.id)}>Delete</Button>
+            <Button sx={{minWidth: 'max-content', margin: '0'}} onClick={() => handleSelectCar(car.id)}>Select</Button>
         </div>
     )
 }

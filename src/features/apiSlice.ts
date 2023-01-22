@@ -7,6 +7,14 @@ type carAPI = {
     id: number,
 }
 
+type UpdateCar = {
+    data: {
+        name: string,
+        color: string,
+    };
+    id: number;
+}
+
 type ICarStatus = {
     id: number;
     status: string;
@@ -53,6 +61,14 @@ export const garageApi = createApi({
             }),
             invalidatesTags: [{type: 'Cars', id: 'LIST'}],
         }),
+        updateCar: builder.mutation<carAPI, UpdateCar>({
+            query: ({data, id}) => ({
+                url: `/garage/${id}`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: [{type: 'Cars', id: 'LIST'}],
+        }),
         startCar: builder.mutation<ICarSuccessResponse, ICarStatus>({
             query(data) {
               const { id, status } = data;
@@ -88,4 +104,5 @@ export const {
   useDeleteCarMutation,
   useStartCarMutation,
   useCheckEngineMutation,
+  useUpdateCarMutation,
 } = garageApi;

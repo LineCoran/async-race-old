@@ -5,8 +5,8 @@ interface CarIconProps {
 function CarIcon({ color }: CarIconProps) {
   return (
     <svg width='75px' height='75px' viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg' fill={color} transform='matrix(-1, 0, 0, 1, 0, 0)rotate(0)'>
-      <g id='SVGRepo_bgCarrier' stroke-width='0'/>
-      <g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'/>
+      <g id='SVGRepo_bgCarrier' strokeWidth='0'/>
+      <g id='SVGRepo_tracerCarrier' strokeLinecap='round' strokeLinejoin='round'/>
       <g id='SVGRepo_iconCarrier'> <defs id='defs3009'/> 
       <g id='layer1' transform='translate(0,-540.36218)'> 
       <g id='g4295'> <path transform='translate(0,540.36218)'/> 
