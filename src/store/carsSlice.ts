@@ -6,16 +6,26 @@ type Car = {
     color: string;
 }
 
+type carListParams = {
+    _page: number;
+    _limit: number;
+}
+
 type CarsState = {
     cars: Car[];
     raceStatus: boolean;
     updateCarId: number | null;
+    carListParams: carListParams;
 }
 
 const initialState: CarsState = {
     cars: [],
     raceStatus: false,
     updateCarId: null,
+    carListParams: {
+        _limit: 7,
+        _page: 2,
+    }
 }
 
 const carsSLice = createSlice({

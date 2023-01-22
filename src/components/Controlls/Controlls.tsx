@@ -7,8 +7,9 @@ import { carPromiseResult } from "../../interfaces/interfaces";
 import './Controlls.css'
 
 function Controls() {
-    const { data } = useGetAllCarsQuery('');
     const raceStatus = useAppSelector((state) => state.carsReducer.raceStatus);
+    const params = useAppSelector((state) => state.carsReducer.carListParams);
+    const { data } = useGetAllCarsQuery(params);
     const dispatch = useAppDispatch();
     const [addCar] = useAddCarMutation();
     const [startCar] = useStartCarMutation();

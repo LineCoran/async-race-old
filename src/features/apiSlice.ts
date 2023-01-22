@@ -29,14 +29,20 @@ type ICheckDriver = {
     success: boolean;
 }
 
+type IGetCar = {
+    _page: number;
+    _limit: number;
+}
+
 export const garageApi = createApi({
     reducerPath: 'Cars',
     tagTypes: ['Cars'],
     baseQuery: fetchBaseQuery({baseUrl: 'http://127.0.0.1:3000'}),
     endpoints: (builder) => ({
-        getAllCars: builder.query<carAPI[], string>({
-            query: () => ({
-                url: '/garage'
+        getAllCars: builder.query<carAPI[], IGetCar>({
+            query: (params) => ({
+                url: `/garage`,
+                params,
             }),
             providesTags: (result) =>
             result
