@@ -11,11 +11,19 @@ type carListParams = {
     _limit: number;
 }
 
+type winnerListParams = {
+    _page: number;
+    _limit: number;
+    _sort: string;
+    _order: string;
+}
+
 type CarsState = {
     cars: Car[];
     raceStatus: boolean;
     updateCarId: number | null;
     carListParams: carListParams;
+    winnerListParams: winnerListParams;
 }
 
 const initialState: CarsState = {
@@ -25,6 +33,12 @@ const initialState: CarsState = {
     carListParams: {
         _limit: 7,
         _page: 1,
+    },
+    winnerListParams: {
+        _limit: 7,
+        _page: 1,
+        _sort: 'id',
+        _order: 'ASC',
     }
 }
 
@@ -44,9 +58,29 @@ const carsSLice = createSlice({
         },
         addIdUpdatedCarSlice(state, action: PayloadAction<number | null>) {
             state.updateCarId = action.payload;
-        }
+        },
+        changeGaragePage(state, action: PayloadAction<boolean>) {
+            if (action.payload) {
+                state.carListParams._page++;
+            } else {
+                state.carListParams._page--;
+            }
+        },
+        changeWinnerPage(state, action: PayloadAction<boolean>) {
+            if (action.payload) {
+                state.winnerListParams._page++;
+            } else {
+                state.winnerListParams._page--;
+            }
+        },
     }
 })
 
-export const { addCar, changeRaceStatus, addIdUpdatedCarSlice } = carsSLice.actions;
+export const {
+    addCar,
+    changeRaceStatus,
+    addIdUpdatedCarSlice,
+    changeGaragePage,
+    changeWinnerPage,
+} = carsSLice.actions;
 export default carsSLice.reducer;

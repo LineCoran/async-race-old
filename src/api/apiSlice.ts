@@ -49,6 +49,13 @@ type WinnerParams = {
   time: number,
 }
 
+type winnerListParams = {
+    _page: number;
+    _limit: number;
+    _sort: string;
+    _order: string;
+}
+
 
 
 export const garageApi = createApi({
@@ -78,7 +85,7 @@ export const garageApi = createApi({
               : [{ type: 'Cars', id: 'LIST' }],
         }),
         getAllCars: builder.query<carAPI[], string>({
-            query: (params) => ({
+            query: () => ({
                 url: `/garage`,
             }),
             providesTags: (result) =>
@@ -112,7 +119,20 @@ export const garageApi = createApi({
             }),
             invalidatesTags: [{type: 'Cars', id: 'LIST'}],
         }),
-        getWinners: builder.query<WinnerParams[], string>({
+        getWinners: builder.query<WinnerParams[], winnerListParams>({
+            query: (params) => ({
+                url: `/winners`,
+                params,
+            }),
+            providesTags: (result) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'Cars' as const, id })),
+                  { type: 'Cars', id: 'LIST' },
+                ]
+              : [{ type: 'Cars', id: 'LIST' }],
+        }),
+        getAllWinners: builder.query<WinnerParams[], string>({
             query: () => ({
                 url: `/winners`,
             }),
@@ -178,4 +198,5 @@ export const {
   useGetWinnerQuery,
   useUpdateWinnerMutation,
   useGetAllCarsQuery,
+  useGetAllWinnersQuery,
 } = garageApi;

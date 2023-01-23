@@ -2,7 +2,7 @@ import { Button } from "@mui/material"
 import { useCheckEngineMutation, useDeleteCarMutation, useStartCarMutation, useAddWinnerMutation, useUpdateWinnerMutation, useGetWinnerQuery } from '../../api/apiSlice';
 import CarIcon from '../CarIcon/CarIcon';
 import { useState } from 'react';
-import { startAnimation, stopAnimation, calcTime, isBestTime, addStyleSelectedCar } from "../../utils/helpers";
+import { startAnimation, stopAnimation, calcTime, addStyleSelectedCar } from "../../utils/helpers";
 import { ICarProps } from "../../interfaces/interfaces";
 import { useAppSelector } from "../../hooks";
 import { useAppDispatch } from "../../hooks";
@@ -50,7 +50,7 @@ function Car({ car, listId } : ICarProps) {
     }
     return(
         <div className="car-wrapper" id={`${car.id}`}>
-            <h3>{listId + 1}. {car.name}</h3>
+            <h3>{car.id}. {car.name}</h3>
             <div className='track'>
                 <div className='car-icon' id={'car'+String(car.id)}>
                     <CarIcon color={car.color}/>
