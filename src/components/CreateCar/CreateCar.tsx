@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material"
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
-import { useAddCarMutation } from "../../features/apiSlice";
+import { useAddCarMutation } from "../../api/apiSlice";
 
 function CreateCar() {
   const [color, setColor] = useState('#aabbcc');

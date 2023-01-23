@@ -1,4 +1,4 @@
-import { useGetAllCarsQuery } from "../../features/apiSlice";
+import { useGetCarsQuery } from "../../api/apiSlice";
 import { useAppSelector } from "../../hooks";
 import Car from "../Car/Car";
 import './CarList.css';
@@ -6,7 +6,7 @@ import './CarList.css';
 function CarList() {
 
   const params = useAppSelector((state) => state.carsReducer.carListParams);
-  const { data } = useGetAllCarsQuery(params);
+  const { data } = useGetCarsQuery(params);
 
   if (data !== undefined) {
     return (

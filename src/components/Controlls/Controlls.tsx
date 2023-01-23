@@ -1,43 +1,53 @@
 import { Button, ButtonGroup } from "@mui/material";
-import { useAddCarMutation, useCheckEngineMutation, useGetAllCarsQuery, useStartCarMutation } from "../../features/apiSlice";
+import { useAddCarMutation, useAddWinnerMutation, useCheckEngineMutation, useGetCarsQuery, useStartCarMutation, useUpdateWinnerMutation } from "../../api/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { changeRaceStatus } from "../../store/carsSlice";
-import { calcTime, startAnimation, stopAnimation } from "../../utils/helpers";
-import { carPromiseResult } from "../../interfaces/interfaces";
+import { calcTime, getWinnerById, startAnimation, stopAnimation } from "../../utils/helpers";
 import './Controlls.css'
 
 function Controls() {
     const raceStatus = useAppSelector((state) => state.carsReducer.raceStatus);
     const params = useAppSelector((state) => state.carsReducer.carListParams);
-    const { data } = useGetAllCarsQuery(params);
+    const { data } = useGetCarsQuery(params);
     const dispatch = useAppDispatch();
     const [addCar] = useAddCarMutation();
     const [startCar] = useStartCarMutation();
     const [checkEngine] = useCheckEngineMutation();
-
+    const [addWinner] = useAddWinnerMutation();
+    const [updateWinner] = useUpdateWinnerMutation();
+    
     async function startRace(status: string) {
+        if (status === 'started') {
+          dispatch(changeRaceStatus(true))
+        } else {
+          dispatch(changeRaceStatus(false))
+        }
         if (data !== undefined && data.length > 0) {
-         const promises = await Promise.all(data.map((car, index) => {
-           return new Promise<carPromiseResult>(async (res, rej) => {
-             const {distance, velocity} = await startCar({id: car.id, status: status}).unwrap();
-             const time = calcTime(distance, velocity);
-             res({ time, id: car.id })
-             if (status === 'started') {
-               try {
-                 await checkEngine({id: car.id, status: 'drive'}).unwrap();
-               } catch(err) {
-                 stopAnimation(car.id);
-               }
-             }
-           })
-         }))
-         promises.map((car) => {
-             startAnimation(car.id, car.time as number);
-             dispatch(changeRaceStatus(!raceStatus));
-             return undefined
-           })
-       }
+          data.map((car) => handleMoveCar(car.id, status))
+        }
     }
+
+    async function handleMoveCar(id: number, status: string) {
+      const {distance, velocity} = await startCar({id, status}).unwrap();
+      const winnerCar = await getWinnerById(id);
+      const time = calcTime(distance, velocity);
+      startAnimation(id, time);
+      if (status === 'started') {
+          try {
+              await checkEngine({id, status: 'drive'}).unwrap();
+              if (!Object.keys(winnerCar)) {
+                  addWinner({id, wins: 1, time});
+              } else {
+                  if (time < winnerCar.time) {
+                      const newWinner = {wins: winnerCar.wins+1, time};
+                      updateWinner({data: newWinner, id})
+                  }
+              }
+          } catch(err) {
+              stopAnimation(id);
+          }
+  }
+}
 
     const handleGenerateCar = async () => {
         let countOfCarsGenerate = 100;
@@ -51,8 +61,8 @@ function Controls() {
         <h2 className='car-list-title'>GARAGE ({data ? data.length : '0'})</h2>
         <ButtonGroup variant="outlined" aria-label="outlined button group">
           <Button onClick={handleGenerateCar}>Generate</Button>
-          <Button onClick={() => startRace('started')}>Race</Button>
-          <Button onClick={() => startRace('stopped')}>Stop</Button>
+          <Button disabled={raceStatus} onClick={() => startRace('started')}>Race</Button>
+          <Button disabled={!raceStatus} onClick={() => startRace('stopped')}>Stop</Button>
         </ButtonGroup>
       </section>
     )

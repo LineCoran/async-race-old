@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { garageApi } from '../features/apiSlice';
+import { garageApi } from '../api/apiSlice';
 import carsReducer from './carsSlice';
 
 const store = configureStore({

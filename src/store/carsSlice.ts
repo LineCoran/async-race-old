@@ -24,7 +24,7 @@ const initialState: CarsState = {
     updateCarId: null,
     carListParams: {
         _limit: 7,
-        _page: 2,
+        _page: 1,
     }
 }
 

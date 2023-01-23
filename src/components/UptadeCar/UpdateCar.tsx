@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material"
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { useUpdateCarMutation } from "../../features/apiSlice";
+import { useUpdateCarMutation } from "../../api/apiSlice";
 import { addIdUpdatedCarSlice } from "../../store/carsSlice";
 
 function UpdateCar() {
