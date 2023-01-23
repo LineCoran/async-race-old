@@ -8,6 +8,7 @@ function CarList() {
   const params = useAppSelector((state) => state.carsReducer.carListParams);
   const { data } = useGetCarsQuery(params);
 
+
   if (data !== undefined) {
     return (
       <div className="car-list-wrapper">

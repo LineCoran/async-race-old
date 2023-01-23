@@ -11,3 +11,14 @@ h1, h2, h3, h4, h5, h6, *, ::before, ::after {
     margin: 0 auto;
     overflow-x: hidden;
 }
+
+.page-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+.garage-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+}

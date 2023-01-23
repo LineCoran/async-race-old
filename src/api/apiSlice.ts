@@ -77,6 +77,18 @@ export const garageApi = createApi({
                 ]
               : [{ type: 'Cars', id: 'LIST' }],
         }),
+        getAllCars: builder.query<carAPI[], string>({
+            query: (params) => ({
+                url: `/garage`,
+            }),
+            providesTags: (result) =>
+            result
+              ? [
+                  ...result.map(({ id }) => ({ type: 'Cars' as const, id })),
+                  { type: 'Cars', id: 'LIST' },
+                ]
+              : [{ type: 'Cars', id: 'LIST' }],
+        }),
         deleteCar: builder.mutation({
             query: (id: number) => ({
                 url: `/garage/${id}`,
@@ -165,4 +177,5 @@ export const {
   useGetWinnersQuery,
   useGetWinnerQuery,
   useUpdateWinnerMutation,
+  useGetAllCarsQuery,
 } = garageApi;

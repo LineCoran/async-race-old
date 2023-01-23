@@ -24,11 +24,13 @@ function App() {
   return (
     <div className='container'>
       <Button onClick={handleSwitchPage}>{pageNameButton}</Button>
+      <div className='page-wrapper'>
       <div style={{opacity: (isGarage)?'1':'0'}}>
         <Garage />
       </div>
-      <div style={{opacity: (!isGarage)?'1':'0'}}>
+      <div className='garage-wrapper' style={{opacity: (!isGarage)?'1':'0'}}>
         <Winners />
+      </div>
       </div>
     </div>
   )

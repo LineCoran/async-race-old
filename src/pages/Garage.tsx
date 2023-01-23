@@ -3,7 +3,7 @@ import CarList from "../components/CarList/CarList";
 
 function Garage() {
   return (
-    <main>
+    <main className='garage'>
       <MyForm />  
         <section>
             <CarList />

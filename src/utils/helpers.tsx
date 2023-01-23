@@ -20,7 +20,7 @@ export function startAnimation(id: number, time: number) {
 
 export function calcTime(distance: number, velocity: number) {
     const COUNT_MS_IN_SECOND = 1000;
-    return distance/velocity/COUNT_MS_IN_SECOND;
+    return Number((distance/velocity/COUNT_MS_IN_SECOND).toFixed(1));
 
 }
 
